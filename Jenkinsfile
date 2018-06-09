@@ -9,7 +9,8 @@ pipeline {
     stage('build') {
       steps {
         node(label: 'maven') {
-          sh 'mvn package'
+          sh '''ls -al
+mvn package'''
           stash(name: 'jar', includes: 'target/*.jar')
         }
         
