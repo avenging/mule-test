@@ -1,0 +1,18 @@
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+  name: "mule-test" 
+spec:
+  runPolicy: "Serial" 
+  source:
+    git:
+      uri: https://github.com/avenging/mule-test.git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: "ImageStreamTag"
+        name: "openjdk:latest"
+  output: 
+    to:
+      kind: ImageStreamTag
+      name: 'mule-test:latest'

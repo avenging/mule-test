@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: mule-test
+spec:
+  replicas: 1
+  selector:
+    name: mule-test
+  template:
+    metadata:
+      labels:  
+        name: mule-test 
+    spec:
+      containers:
+      - image: mule-test/mule-test
+        name: mule-test
+        ports:
+        - containerPort: 8181
+          protocol: TCP
+      restartPolicy: Always
+  triggers:
+  - type: ConfigChange 
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - mule-test
+      from:
+        kind: ImageStreamTag
+        name: mule-test:latest
+    type: ImageChange  
+  strategy:
+    type: Rolling      
