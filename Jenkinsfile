@@ -3,7 +3,11 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        openshiftBuild(namespace: 'mule-test', bldCfg: 'mule-test', showBuildLogs: 'true')
+        node(label: 'maven') {
+          sh 'mvn package'
+          stash(name: 'jar', includes: 'target/*.jar')
+        }
+        
       }
     }
   }
