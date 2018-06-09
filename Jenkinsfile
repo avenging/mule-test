@@ -9,7 +9,8 @@ pipeline {
     stage('build') {
       steps {
         node(label: 'maven') {
-          sh '''ls -al
+          git(url: 'https://github.com/avenging/mule-test.git', branch: 'master')
+          sh '''ls -la
 mvn package'''
           stash(name: 'jar', includes: 'target/*.jar')
         }
