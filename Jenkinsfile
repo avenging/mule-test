@@ -1,14 +1,14 @@
 pipeline {
   agent {
     node {
-      label 'jnlp'
+      label 'maven'
     }
     
   }
   stages {
     stage('build') {
       steps {
-        node(label: 'maven') {
+        node(label: 'jnlp') {
           sh 'mvn package'
           stash(name: 'jar', includes: 'target/*.jar')
         }
