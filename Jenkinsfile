@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        node(label: 'jnlp') {
+        node(label: 'maven') {
           sh 'mvn package'
           stash(name: 'jar', includes: 'target/*.jar')
         }
