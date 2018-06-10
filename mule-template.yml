@@ -4,7 +4,7 @@ metadata:
   name: mule-template
   annotations:
     description: "A Template for starting a mule instance with a single application"
-    icon-class: "fab fa-mandalorian"
+    icon-class: "fa fa-mandalorian"
     tags: "ESB,mule"
 parameters:
   - name: APP_NAME
