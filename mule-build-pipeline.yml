@@ -1,18 +1,15 @@
 kind: "BuildConfig"
-apiVersion: "v1"
+apiVersion: v1
 metadata:
-  name: "mule-test" 
+  creationTimestamp: null
+  labels:
+    name: mule-test-pipeline
+  name: mule-test-pipeline
 spec:
-  runPolicy: "Serial" 
   source:
     git:
       uri: https://github.com/avenging/mule-test.git
   strategy:
-    dockerStrategy:
-      from:
-        kind: "ImageStreamTag"
-        name: "openjdk:latest"
-  output: 
-    to:
-      kind: ImageStreamTag
-      name: 'mule-test:latest'
+    jenkinsPipelineStrategy:
+      jenkinsfilePath: Jenkinsfile
+    type: JenkinsPipeline

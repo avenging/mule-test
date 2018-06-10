@@ -12,14 +12,17 @@ try {
                     git(url: 'https://github.com/avenging/mule-test.git', branch: 'master')
                   }
                   stage("Build JAR") {
-                    sh "mvn clean package"
-                    stash name:"jar", includes:"target/hello-mule.jar"
+                    sh sh '''ls -al
+mvn clean package
+ls -al
+ls -al target/'''
+                    stash name:"jar", includes:"target/*.jar"
                   }
                 }
                 node {
                   stage("Build Image") {
                     unstash name:"jar"
-                    sh "oc start-build mule-test --from-file=target/hello-mule.jar -n ${project}"
+                    sh "oc start-build mule-test --from-file=target/*.jar -n ${project}"
                     openshiftVerifyBuild bldCfg: "${appName}-docker", namespace: project, waitTime: '20', waitUnit: 'min'
                   }
                   stage("Deploy") {
