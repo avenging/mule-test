@@ -7,4 +7,6 @@ ln -s /opt/mule-standalone-4.1.0 /opt/mule && \
 chgrp -R 0 /opt/mule-standalone-4.1.0 && \
 chmod -R g=u /opt/mule-standalone-4.1.0
 
+COPY hello-mule.jar /opt/mule/apps
+
 CMD [ "/opt/mule/bin/mule" ]
