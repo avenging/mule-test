@@ -12,7 +12,7 @@ try {
                     git(url: 'https://github.com/avenging/mule-test.git', branch: 'master')
                   }
                   stage("Build JAR") {
-                    sh sh '''ls -al
+                    sh '''ls -al
 mvn clean package
 ls -al
 ls -al target/'''
