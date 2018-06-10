@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: mule-template
+  annotations:
+    description: "A Template for starting a mule instance with a single application"
+    tags: "ESB,mule"
+parameters:
+  - name: APP_NAME
+    displayName: Application Name
+    description: Application name
+    value: mule-test
+    required: true
+  - name: SOURCE_REPO_URL
+    displayName: Source Repository URL
+    description: The URL of the repository with your application source code
+    value: https://github.com/avenging/mule-test.git
+    required: true
+  - name: EXTERNAL_ROUTE
+    displayName: External URL to mule application
+    description: mule-test.osapps.192.168.121.44.nip.io
+    value: mule-test.osapps.192.168.121.44.nip.io
+    required: true
+objects:
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}
+  - kind: "ImageStream"
+    apiVersion: "v1"
+    metadata:
+      name: "openjdk"
+    spec:
+      dockerImageRepository: "docker.io/openjdk"
+  - kind: "BuildConfig"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME} 
+    spec:
+      runPolicy: "Serial" 
+      source:
+        dockerfile: |-
+          FROM openjdk:7
+          RUN cd /opt && \
+          wget https://repository.mulesoft.org/nexus/content/repositories/releases/org/mule/distributions/mule-standalone/4.1.0/mule-standalone-4.1.0.tar.gz && \
+          tar xvzf mule-standalone-4.1.0.tar.gz && \
+          rm mule-standalone-4.1.0.tar.gz && \
+          ln -s /opt/mule-standalone-4.1.0 /opt/mule && \
+          chgrp -R 0 /opt/mule-standalone-4.1.0 && \
+          chmod -R g=u /opt/mule-standalone-4.1.0
+          COPY hello-mule-mule-application.jar /opt/mule/apps
+          CMD [ "/opt/mule/bin/mule" ]
+      strategy:
+        dockerStrategy:
+          from:
+            kind: "ImageStreamTag"
+            name: "openjdk:latest"
+      output: 
+        to:
+          kind: ImageStreamTag
+          name: '${APP_NAME}:latest'
+  - kind: "BuildConfig"
+    apiVersion: v1
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: ${APP_NAME}-pipeline
+      name: ${APP_NAME}-pipeline
+    spec:
+      source:
+        git:
+          uri: ${SOURCE_REPO_URL}
+      strategy:
+        jenkinsPipelineStrategy:
+          jenkinsfile: |-
+            try {
+              timeout(time: 20, unit: 'MINUTES') {
+                def appName="${APP_NAME}"
+                def project=""
+                node {
+                  stage("Initialize") {
+                    project = env.PROJECT_NAME
+                  }
+                }
+                node("maven") {
+                  stage("Checkout") {
+                    git(url: 'https://github.com/avenging/mule-test.git', branch: 'master')
+                  }
+                  stage("Build JAR") {
+                    sh '''ls -al
+                          mvn clean package
+                          ls -al
+                          ls -al target/'''
+                    stash name:"jar", includes:"target/hello-mule-mule-application.jar"
+                  }
+                }
+                node {
+                  stage("Build Image") {
+                    unstash name:"jar"
+                    sh "oc start-build ${APP_NAME} --from-file=target/hello-mule-mule-application.jar -n ${project}"
+                    openshiftVerifyBuild bldCfg: "${APP_NAME}", namespace: project, waitTime: '20', waitUnit: 'min'
+                  }
+                }
+              }
+            } catch (err) {
+              echo "in catch block"
+              echo "Caught: ${err}"
+              currentBuild.result = 'FAILURE'
+              throw err
+            }
+        type: JenkinsPipeline
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}
+    spec:
+      replicas: 1
+      selector:
+        name: ${APP_NAME}
+      template:
+        metadata:
+          labels:  
+            name: ${APP_NAME}
+        spec:
+          containers:
+          - image: ${APP_NAME}/${APP_NAME}
+            name: ${APP_NAME}
+            ports:
+            - containerPort: 8181
+              protocol: TCP
+          restartPolicy: Always
+      triggers:
+      - type: ConfigChange 
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+          - ${APP_NAME}
+          from:
+            kind: ImageStreamTag
+            name: ${APP_NAME}:latest
+        type: ImageChange  
+      strategy:
+        type: Rolling
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}
+    spec:
+      selector:                  
+        name: ${APP_NAME}
+      ports:
+      - nodePort: 0
+        port: 80       
+        protocol: TCP
+        targetPort: 8181
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      name: ${APP_NAME}
+      namespace: ${APP_NAME}
+    spec:
+      host: ${EXTERNAL_ROUTE}
+      to:
+        kind: Service
+        name: ${APP_NAME}
+        weight: 100
+      wildcardPolicy: None
