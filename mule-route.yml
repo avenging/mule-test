@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: mule-test
+  namespace: mule-test
+spec:
+  host: mule-test.osapps.192.168.121.44.nip.io
+  to:
+    kind: Service
+    name: mule-test
+    weight: 100
+  wildcardPolicy: None
