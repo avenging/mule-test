@@ -75,7 +75,7 @@ objects:
         jenkinsPipelineStrategy:
           jenkinsfile: |-
             try {
-              timeout(time: 20, unit: 'MINUTES') {
+              timeout(time: 60, unit: 'MINUTES') {
                 def appName="${APP_NAME}"
                 def project=""
                 node {
