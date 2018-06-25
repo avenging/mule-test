@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: DeploymentConfig
 metadata:
-  name: mule-test
+  name: mule-helloworld
 spec:
   replicas: 1
   selector:
-    name: mule-test
+    name: mule-helloworld
   template:
     metadata:
       labels:  
-        name: mule-test 
+        name: mule-helloworld 
     spec:
       containers:
-      - image: mule-test/mule-test
-        name: mule-test
+      - image: mule/mule-helloworld
+        name: mule-helloworld
         ports:
         - containerPort: 8181
           protocol: TCP
@@ -23,10 +23,10 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - mule-test
+      - mule-helloworld
       from:
         kind: ImageStreamTag
-        name: mule-test:latest
+        name: mule-helloworld:latest
     type: ImageChange  
   strategy:
     type: Rolling

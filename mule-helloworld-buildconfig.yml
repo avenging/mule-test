@@ -1,0 +1,20 @@
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+  name: "mule-helloworld" 
+spec:
+  runPolicy: "Serial" 
+  source:
+    dockerfile: |-
+      FROM mule-test:latest
+      COPY hello-mule-mule-application.jar /opt/mule/apps
+      CMD [ "/opt/mule/bin/mule" ]
+  strategy:
+    dockerStrategy:
+      from:
+        kind: "ImageStreamTag"
+        name: "mule-test:latest"
+  output: 
+    to:
+      kind: ImageStreamTag
+      name: 'mule-helloworld:latest'
