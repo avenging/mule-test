@@ -10,11 +10,11 @@
 	  http://www.mulesoft.org/schema/mule/http
 	  http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 	">
-	
-<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" basePath="/" >
-	<http:listener-connection host="0.0.0.0" port="8181" />
-</http:listener-config>
-<flow name="hello-mule" >
-	<http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path="hello"/>
-	<set-payload value="#['Hello World!' ++ ' Today is ' ++ now()]" doc:name="Set Payload"/> 
-</flow>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" basePath="/" >
+		<http:listener-connection host="0.0.0.0" port="8181" />
+		</http:listener-config>
+	<flow name="hello-mule" >
+		<http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path="hello"/>
+		<set-payload value="#['Hello World!' ++ ' Today is ' ++ now()]" doc:name="Set Payload"/> 
+	</flow>
+</mule>
