@@ -16,5 +16,5 @@
 </http:listener-config>
 <flow name="hello-mule" >
 	<http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path="hello"/>
-	<set-payload value="#['Hello, World!' + ' Today is ' + server.dateTime.format('dd/MM/yy')]" doc:name="Set Payload"/> 
+	<set-payload value="#['Hello World!' ++ ' Today is ' ++ now()]" doc:name="Set Payload"/> 
 </flow>
