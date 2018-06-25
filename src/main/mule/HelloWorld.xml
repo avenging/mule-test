@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
- 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" 
-      xmlns="http://www.mulesoft.org/schema/mule/core" 
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
-	xmlns:spring="http://www.springframework.org/schema/beans" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="
-	    http://www.springframework.org/schema/beans 
-	    http://www.springframework.org/schema/beans/spring-beans-current.xsd
-          http://www.mulesoft.org/schema/mule/core 
-	    http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
-          http://www.mulesoft.org/schema/mule/http 
-	    http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="
+	  http://www.mulesoft.org/schema/mule/core
+	  http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	  http://www.mulesoft.org/schema/mule/http
+	  http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 	">
- 
-    <http:listener-config name="listener-config" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
-    <flow name="HelloFlow" doc:name="HelloFlow">
-        <http:listener config-ref="listener-config" path="/" doc:name="HTTP Connector"/>
-        <set-payload value="#['Hello, World!' + ' Today is ' + server.dateTime.format('dd/MM/yy')]" doc:name="Set Payload"/>
-    </flow>
-</mule>
+	
+<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" basePath="/" >
+	<http:listener-connection host="0.0.0.0" port="8181" />
+</http:listener-config>
+<flow name="hello-mule" >
+	<http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path="hello"/>
+	<set-payload value="#['Hello, World!' + ' Today is ' + server.dateTime.format('dd/MM/yy')]" doc:name="Set Payload"/> 
+</flow>
