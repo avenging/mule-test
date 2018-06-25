@@ -14,7 +14,7 @@
 		<http:listener-connection host="0.0.0.0" port="8181" />
 		</http:listener-config>
 	<flow name="hello-mule" >
-		<http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path="hello"/>
-		<set-payload value="#['Hello World!' ++ ' Today is ' ++ now()]" doc:name="Set Payload"/> 
+		<http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path=""/>
+		<set-payload value="#['Hello World!' ++ ' Today is ' ++ now()]" doc:name="Set Payload" mimeType="text/plain"/> 
 	</flow>
 </mule>
