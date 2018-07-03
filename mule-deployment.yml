@@ -17,7 +17,17 @@ spec:
         ports:
         - containerPort: 8181
           protocol: TCP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
       restartPolicy: Always
+      volumes:
+        - name: config-volume
+          configMap:
+            name: mule-configmap
+            items:
+            - key: message
+              path: mule.config
   triggers:
   - type: ConfigChange 
   - imageChangeParams:
