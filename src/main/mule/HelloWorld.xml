@@ -15,6 +15,6 @@
 		</http:listener-config>
 	<flow name="hello-mule" >
 		<http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path=""/>
-		<set-payload value="#['Hello World!' ++ ' Today is ' ++ now()]" doc:name="Set Payload" mimeType="text/plain"/> 
+                <set-payload value="#[groovy:Thread.currentThread().getContextClassLoader().getResourceAsStream('/config/mule.config').text]"/>
 	</flow>
 </mule>
