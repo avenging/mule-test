@@ -16,13 +16,13 @@ try {
 mvn clean package
 ls -al
 ls -al target/'''
-                    stash name:"jar", includes:"target/hello-mule.jar"
+                    stash name:"zip", includes:"target/hello-mule.zip"
                   }
                 }
                 node {
                   stage("Build Image") {
-                    unstash name:"jar"
-                    sh "oc start-build mule-helloworld --from-file=target/hello-mule.jar -n ${project}"
+                    unstash name:"zip"
+                    sh "oc start-build mule-helloworld --from-file=target/hello-mule.zip -n ${project}"
                     openshiftVerifyBuild bldCfg: "mule-helloworld", namespace: project, waitTime: '20', waitUnit: 'min'
                   }
                 }
