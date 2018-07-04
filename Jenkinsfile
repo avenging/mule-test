@@ -22,7 +22,7 @@ ls -al target/'''
                 node {
                   stage("Build Image") {
                     unstash name:"jar"
-                    sh "oc start-build mule-helloworld --from-file=target/hello-mule-mule-application.jar -n ${project}"
+                    sh "oc start-build mule-helloworld --from-file=target/hello-mule.jar -n ${project}"
                     openshiftVerifyBuild bldCfg: "mule-helloworld", namespace: project, waitTime: '20', waitUnit: 'min'
                   }
                 }
