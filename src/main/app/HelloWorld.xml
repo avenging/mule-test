@@ -13,6 +13,6 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 
    <flow name="HelloWorldFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
-        <set-payload doc:name="Set Payload" value="Hello World!"/>
+        <set-payload doc:name="Set Payload" value="#[Thread.currentThread().getContextClassLoader().getResourceAsStream('/config/mule.config')]"/>
     </flow>
 </mule>
