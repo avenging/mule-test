@@ -16,7 +16,7 @@ try {
 mvn clean package
 ls -al
 ls -al target/'''
-                    stash name:"jar", includes:"target/hello-mule-mule-application.jar"
+                    stash name:"jar", includes:"target/hello-mule.jar"
                   }
                 }
                 node {
