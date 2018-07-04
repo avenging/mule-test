@@ -13,6 +13,11 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 
    <flow name="HelloWorldFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
-        <set-payload doc:name="Set Payload" value="#[groovy:Thread.currentThread().getContextClassLoader().getResourceAsStream('/config/mule.config').text] #[host]"/>
+        <scripting:component doc:name="Groovy">
+          <scripting:script engine="Groovy"><![CDATA[
+String fileContents = new File('/config/mule.config').text;
+payload = fileContents;]]></scripting:script>
+        <set-payload doc:name="Set Payload" value="#[payload]"/>
     </flow>
+
 </mule>
