@@ -17,7 +17,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
           <scripting:script engine="Groovy"><![CDATA[
 String fileContents = new File('/config/mule.config').text;
 payload = fileContents;]]></scripting:script>
-        </scriptiong:component>
+        </scripting:component>
         <set-payload doc:name="Set Payload" value="#[payload]"/>
     </flow>
 
