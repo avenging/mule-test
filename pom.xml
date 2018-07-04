@@ -5,7 +5,7 @@
 	<groupId>org.mule.examples</groupId>
 	<artifactId>hello-mule</artifactId>
         <version>1.0.0</version>
-	<packaging>mule</packaging>
+	<packaging>zip</packaging>
 
         <name>hello-mule</name>
 <properties>
@@ -23,6 +23,7 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
+                                  <skip>true</skip>
 				</configuration>
 			</plugin>
 		</plugins>
