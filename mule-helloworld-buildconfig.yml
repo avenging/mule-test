@@ -6,14 +6,14 @@ spec:
   runPolicy: "Serial" 
   source:
     dockerfile: |-
-      FROM mule-test:latest
-      COPY hello-mule-mule-application.jar /opt/mule/apps
+      FROM mule-dev:latest
+      COPY hello-mule.zip /opt/mule/apps
       CMD [ "/opt/mule/bin/mule" ]
   strategy:
     dockerStrategy:
       from:
         kind: "ImageStreamTag"
-        name: "mule-test:latest"
+        name: "mule-dev:latest"
   output: 
     to:
       kind: ImageStreamTag

@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: mule-helloworld
+spec:
+  replicas: 1
+  selector:
+    name: mule-helloworld
+  template:
+    metadata:
+      labels:  
+        name: mule-helloworld 
+    spec:
+      containers:
+      - image: mule/mule-helloworld
+        name: mule-helloworld
+        ports:
+        - containerPort: 8181
+          protocol: TCP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      restartPolicy: Always
+      volumes:
+        - name: config-volume
+          configMap:
+            name: mule-configmap
+            items:
+            - key: message
+              path: mule.config
+  triggers:
+  - type: ConfigChange 
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - mule-helloworld
+      from:
+        kind: ImageStreamTag
+        name: mule-helloworld:uat
+        namespace: mule-test
+    type: ImageChange  
+  strategy:
+    type: Rolling
