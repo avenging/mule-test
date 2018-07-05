@@ -37,7 +37,7 @@ spec:
       from:
         kind: ImageStreamTag
         name: mule-helloworld:uat
-        namespace: mule-test
+        namespace: mule-dev
     type: ImageChange  
   strategy:
     type: Rolling
