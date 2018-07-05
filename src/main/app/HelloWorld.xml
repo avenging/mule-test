@@ -21,6 +21,8 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
         <scripting:component doc:name="Groovy">
           <scripting:script engine="Groovy"><![CDATA[
 String fileContents = new File('/config/mule.config').text;
+fileContents += "<br />" ;
+fileContents += System.getenv() ;
 payload = fileContents;]]></scripting:script>
         </scripting:component>
         <set-payload doc:name="Set Payload" value="#[payload]"/>
