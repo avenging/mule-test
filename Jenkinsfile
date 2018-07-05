@@ -1,6 +1,6 @@
 try {
              timeout(time: 20, unit: 'MINUTES') {
-                def appName="mule-test"
+                def appName="mule-dev"
                 def project=""
                 node {
                   stage("Initialize") {
@@ -11,7 +11,7 @@ try {
                   stage("Checkout") {
                     git(url: 'https://github.com/avenging/mule-test.git', branch: 'master')
                   }
-                  stage("Build JAR") {
+                  stage("Build Mule App") {
                     sh '''ls -al
 mvn clean package
 ls -al
