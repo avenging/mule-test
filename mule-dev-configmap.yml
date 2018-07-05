@@ -4,4 +4,4 @@ metadata:
   name: mule-configmap
 data: 
   message: |-
-    test environment
+    dev environment
