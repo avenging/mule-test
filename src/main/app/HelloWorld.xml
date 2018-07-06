@@ -22,11 +22,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
           <scripting:script engine="Groovy"><![CDATA[
 String fileContents = new File('/config/mule.config').text;
 fileContents += "\n";
-Map<String, String> map = System.getenv();
-map.entrySet().forEach(entry -> {
-  fileContents += key + "=" + value + "\n";
-});
-
+fileContents += "Hostname: " + System.getenv('HOSTNAME');
 payload = fileContents;]]></scripting:script>
         </scripting:component>
         <set-payload doc:name="Set Payload" value="#[payload]"/>
